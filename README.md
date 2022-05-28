@@ -247,23 +247,8 @@ Data published from the device would be in the JSON format given below:
 
 -   The WebApp is developed using NodeJS, ReactJS and MongoDB.
 
-**TO BE ADDED**
-
-
-<!-- -   Link: [Complete Dashboard]()
-    *   user: admin@LoneTree Smart Dosing Device.com
-    *   pass: admin -->
-
-<!-- ![dashboard21](artwork/db4.png) Dashboard Home Page
-
-![dashboard23](artwork/db3.png) Settings Page
-
-![dashboard18](artwork/db7.png) Map Page Additional Information Marker
-
-![dashboard24](artwork/db5.png) Sign-in Page
-
-![dashboard25](artwork/db6.png) Sign-up Page -->
-
+![dashboard25](artwork/d0.png) Sign-up/Sign-in Page
+![dashboard21](artwork/d1.png) Dashboard Home Page
 ### Database
 
 You can access the database from the link below
