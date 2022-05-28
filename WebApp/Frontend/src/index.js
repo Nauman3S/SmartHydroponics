@@ -2,18 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 // import "antd/dist/antd.css";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
+import history from "./config/history";
 const queryClient = new QueryClient();
 ReactDOM.render(
   <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <Router>
+    <BrowserRouter history={history}>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
         <App />
-      </Router>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );

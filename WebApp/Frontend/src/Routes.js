@@ -11,28 +11,27 @@ import Users from "./pages/Users";
 import Signup from "./SignUp";
 ////utilities////
 
-import { loadProfile } from "./redux/actions/auth.actions";
+// import { loadProfile } from "./redux/actions/auth.actions";
 
 export default function AppRoutes() {
-  const { loading, isAuthenticated } = useSelector((state) => state.auth);
-
+  const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (!loading) {
-      if (window.location.pathname !== "/") dispatch(loadProfile());
-    }
+  // useEffect(() => {
+  //   if (!loading) {
+  //     // if (window.location.pathname !== "/") dispatch(loadProfile());
+  //   }
 
-    return () => {};
-  }, [dispatch, loading]);
+  //   return () => {};
+  // }, [dispatch, loading]);
   return (
     <>
       <Routes>
         <Route exact path='/' element={<Login />} />
         <Route exact path='/signup' element={<Signup />} />
 
-        {isAuthenticated || <Route path='/*' element={<Login />} />}
+        {/* {authState.isSignedIn || <Route path='/*' element={<Login />} />} */}
       </Routes>
-      {isAuthenticated && window.location.pathname !== "/" && (
+      {authState.isSignedIn && (
         <SideBar>
           <Routes hi>
             <Route path='/dashboard' element={<Dashboard />} />

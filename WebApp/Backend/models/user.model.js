@@ -6,14 +6,14 @@ const { model, Schema } = mongoose;
 const { sign } = jwt;
 
 const userSchema = new Schema({
-  fullName: { type: String, required: [true, "Full Name is required"] },
-  email: { type: String, required: [true, "Email is required"] },
+  fullName: { type: "String", required: [true, "Full Name is required"] },
+  email: { type: "String", required: [true, "Email is required"] },
   password: {
-    type: String,
+    type: "String",
     required: [true, "A Password is required to Sign Up"],
   },
   role: {
-    type: String,
+    type: "String",
     default: "client",
     enum: ["client", "admin"],
   },

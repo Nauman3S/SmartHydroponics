@@ -1,23 +1,67 @@
-import Routes from "./Routes";
+// import Routes from "./Routes";
 import "./App.css";
-// import "antd/dist/antd.css";
-import { useDispatch } from "react-redux";
-import { setAuthToken } from "./api";
-import { loadProfile } from "./redux/actions/auth.actions";
-import { useEffect } from "react";
-function App() {
-  const token = localStorage.getItem("token");
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (token) {
-      setAuthToken(token);
-      dispatch(loadProfile());
-    }
-  }, [dispatch, token]);
+import Login from "./Login";
+import Signup from "./SignUp";
+import Dashboard from "./pages/Dashboard";
+import AllUsers from "./pages/AllUsersData";
+import { Navigate, Routes, Route } from "react-router-dom";
+import { getToken } from "./redux/localstorage/index";
+import SideBar from "./components/Sidebar/SideBar";
 
+function LoggedIn({ children, redirectTo }) {
+  let isAuthenticated = getToken();
+
+  return isAuthenticated ? <Navigate replace to={redirectTo} /> : children;
+}
+
+function RequireAuth({ children, redirectTo }) {
+  let isAuthenticated = getToken();
+  return isAuthenticated ? children : <Navigate replace to={redirectTo} />;
+}
+
+function App() {
   return (
-    <div className="App">
-      <Routes />
+    <div className='App'>
+      {/* <Routes /> */}
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <LoggedIn redirectTo={"/dashboard"}>
+              <Login />
+            </LoggedIn>
+          }
+        />
+        <Route
+          path='/signup'
+          element={
+            <LoggedIn redirectTo={"/dashboard"}>
+              <Signup />
+            </LoggedIn>
+          }
+        />
+        <Route
+          path='/dashboard'
+          element={
+            <RequireAuth redirectTo={"/"}>
+              <SideBar>
+                <Dashboard />
+              </SideBar>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/all-users-data'
+          element={
+            <RequireAuth redirectTo={"/"}>
+              <SideBar>
+                <AllUsers />
+              </SideBar>
+            </RequireAuth>
+          }
+        />
+        <Route path='/*' element={<Navigate to={"/"} replace={true} />} />
+      </Routes>
     </div>
   );
 }

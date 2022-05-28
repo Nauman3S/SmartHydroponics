@@ -14,10 +14,5 @@ router.get("/count", dashboardCounts);
  * Get All Users
  */
 router.get("/all-users", getAllUsers);
-/**
- * Update User Status
- * @param {id}
- * @body {string} - Status
- */
 
 module.exports = router;

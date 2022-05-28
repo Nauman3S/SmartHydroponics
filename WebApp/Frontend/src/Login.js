@@ -1,33 +1,41 @@
 import { Button, Form, Input } from "antd";
 // import "antd/dist/antd.css";
+import "./Globle.css";
+
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./Globle.css";
 import { loginAction } from "./redux/actions/auth.actions";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
+
 function Login() {
   const dispatch = useDispatch();
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (!loading) {
-      if (isAuthenticated) {
-        window.location.pathname = "/dashboard";
-      }
+  const navigate = useNavigate();
+  const { isSignedIn } = useSelector((state) => state.auth);
+  console.log(isSignedIn);
+  // useEffect(() => {
+  //   if (isSignedIn) {
+  //     window.location.pathname = "/dashboard";
+  //   }
+  // }, [isSignedIn]);
+  const handleLogin = async (values) => {
+    console.log(values);
+    const res = await dispatch(loginAction(values));
+    console.log(res);
+    if (!res) {
+      navigate("/dashboard");
     }
-  }, [loading, isAuthenticated]);
-
+  };
   return (
     <>
-      <div
-        style={{ display: `${loading ? "none" : "flex"}` }}
-        className='login_page'>
+      <div style={{ display: "flex" }} className='login_page'>
         <div className='flex1'>
           {/* <img className='login_img1' src='/images/logopen.svg' alt=''></img>
           <p style={{ marginBottom: "" }} className='login_text'>
             Welcome! Let’s get started where you left.
           </p> */}
 
-          <img src='/images/logo.jpeg' alt=''></img>
+          <img className='login_img1' src='/images/logo.jpeg' alt=''></img>
         </div>
         <div className='flex2'>
           <img className='phone_sec' src='/images/logo.jpeg' alt=''></img>
@@ -39,7 +47,7 @@ function Login() {
             labelCol={{ span: 10 }}
             wrapperCol={{ span: 14 }}
             onFinish={(values) => {
-              dispatch(loginAction(values));
+              handleLogin(values);
             }}
             onFinishFailed={(error) => {}}>
             <div className='inputs_login'>
@@ -78,10 +86,10 @@ function Login() {
               </Form.Item>
             </div>
 
-            <Form.Item style={{ marginTop: -100, marginLeft: "100px" }}>
+            <Form.Item style={{ marginLeft: "100px" }}>
               <div style={{ textAlign: "center" }}>
                 <Button
-                  loading={loading}
+                  // loading={loading}
                   className='login_btn'
                   htmlType='submit'>
                   Login

@@ -1,6 +1,5 @@
 const express = require("express");
 const User = require("../../models/user.model");
-const Scanner = require("../../models/scanner.model");
 const { Request, Response } = express;
 
 /**
@@ -12,9 +11,7 @@ exports.dashboardCounts = async (req, res) => {
   try {
     const users = await User.countDocuments({ role: "client" });
 
-    return res.status(200).json({
-      users,
-    });
+    return res.status(200).json({ users });
   } catch (error) {
     return res
       .status(500)
@@ -37,9 +34,3 @@ exports.getAllUsers = async (req, res) => {
       .json({ message: `INTERNAL SERVER ERROR: ${error.message}` });
   }
 };
-
-/**
- * User Status Update
- * @param {Request} req - request object
- * @param {Response} res - response object
- */

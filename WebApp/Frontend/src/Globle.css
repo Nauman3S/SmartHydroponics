@@ -94,8 +94,8 @@ a:hover {
 }
 #password.ant-input {
   height: 30px !important;
-  border-radius: 7px !important;
-  width: 500px;
+  border-radius: 7px;
+  /* width: 500px; */
   font-size: 12px;
   font-family: popreg;
 }
@@ -120,7 +120,7 @@ a:hover {
   width: 130px !important;
   height: 37px !important;
   border-radius: 7px !important;
-  margin-top: 115px;
+  margin-top: 60px;
 }
 .login_btn:hover {
   border: 1.5px solid #4a47a3 !important;

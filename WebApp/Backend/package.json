@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
     "prod": "NODE_ENV=production nodemon server.js",
-    "client:build": "cd .. && cd Frontend && npm run build"
+    "client:build": "cd .. && cd Frontend && npm run build",
+    "deploy": "cd .. && cd Frontend && yarn run build && cd .. && cd .. && git add . && git commit -m 'updates & deploy' && git push -u origin beta"
   },
   "keywords": [],
   "author": "",

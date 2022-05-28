@@ -3,7 +3,9 @@ import { dashboardCounts } from "../api/apiFunctions";
 import { useQuery } from "react-query";
 
 const Userdata = () => {
-  const { data, isLoading } = useQuery("DashboardCount", dashboardCounts);
+  const { data, isLoading } = useQuery("DashboardCount", () =>
+    dashboardCounts()
+  );
   console.log(data);
   const data1 = [
     {
@@ -44,7 +46,9 @@ const Userdata = () => {
                 <img className='mx-1' alt='' src={el.imagee}></img>
               </div>
               <div>
-                <p className='text-[18px] font-semibold px-2'>{el.text}</p>
+                <p className='text-[18px] font-semibold px-2'>
+                  {isLoading || el.text}
+                </p>
                 <p className='text-[#4a47a3] font-semibold text-[12px] px-2'>
                   {el.description}
                 </p>
