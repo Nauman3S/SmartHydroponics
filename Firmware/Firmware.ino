@@ -1,12 +1,10 @@
 #include "headers.h"   //all misc. headers and functions
 #include "MQTTFuncs.h" //MQTT related functions
-
+#include "DHT22Handler.h"
 #include "webApp.h" //Captive Portal webpages
 #include <FS.h>     //ESP32 File System
-
+#include "HVACHandler.h"
 #include "communicationHandler.h"
-#include "GPRS.h"
-// 45,20;25/01/2022 09:52:10;12.2,13.765
 IPAddress ipV(192, 168, 4, 1);
 String loadParams(AutoConnectAux &aux, PageArgument &args) //function to load saved settings
 {
@@ -50,22 +48,11 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
     hostName = args.arg("hostname");
     hostName.trim();
 
-    networkType = args.arg("networkType");
-    networkType.trim();
-
-    apn = args.arg("apn");
-    apn.trim();
-
-    apnUser = args.arg("apnUser");
-    apnUser.trim();
-
-    apnPass = args.arg("apnPass");
-    apnPass.trim();
     // The entered value is owned by AutoConnectAux of /mqtt_setting.
     // To retrieve the elements of /mqtt_setting, it is necessary to get
     // the AutoConnectAux object of /mqtt_setting.
     File param = FlashFS.open(PARAM_FILE, "w");
-    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey", "hostname", "apPass", "apnUser", "apnPass", "apn", "networkType", "settingsPass"});
+    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey", "hostname", "apPass", "settingsPass"});
     param.close();
 
     // Echo back saved parameters to AutoConnectAux page.
@@ -74,14 +61,10 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
     echo.value += "Channel ID: " + channelId + "<br>";
     echo.value += "Username: " + userKey + "<br>";
     echo.value += "Password: " + apiKey + "<br>";
-    echo.value += "APN: " + apn + "<br>";
-    echo.value += "APN Username: " + apnUser + "<br>";
-    echo.value += "APN Password: " + apnPass + "<br>";
-    echo.value += "Network Type: " + networkType + "<br>";
     echo.value += "ESP host name: " + hostName + "<br>";
     echo.value += "AP Password: " + apPass + "<br>";
     echo.value += "Settings Page Password: " + settingsPass + "<br>";
-    mqttPublish("SmartEFM/config", String("Something"));
+    mqttPublish("SmartHVAC/config", String("Something"));
 
     return String("");
 }
@@ -101,23 +84,103 @@ bool loadAux(const String auxName) //load defaults from data/*.json
     return rc;
 }
 uint8_t inAP = 0;
-
+int safteySW = 0;
+void loopSafteySwitch()
+{
+    if (getSafteySwitchState(SWITCH1))
+    {
+        safteySW = 1;
+    }
+    if (getSafteySwitchState(SWITCH2))
+    {
+        safteySW = 0;
+    }
+}
+void HVACController()
+{
+    if (isDataAvailable() && safteySW == 0)
+    {
+        String dataValue = readData();
+        if (dataValue.indexOf(String("Heat Stage 1")))
+        {
+            status = String("Heat Stage 1");
+            turnOffCooling();
+            setHeating(STAGE1);
+        }
+        else if (dataValue.indexOf(String("Heat Stage 2")))
+        {
+            status = String("Heat Stage 2");
+            turnOffCooling();
+            setHeating(STAGE2);
+        }
+        else if (dataValue.indexOf(String("Heat Stage 3")))
+        {
+            status = String("Heat Stage 3");
+            turnOffCooling();
+            setHeating(STAGE3);
+        }
+        else if (dataValue.indexOf(String("Heat OFF")))
+        {
+            status = String("Heat OFF");
+            turnOffHeating();
+        }
+        else if (dataValue.indexOf(String("Cool OFF")))
+        {
+            status = String("Cool OFF");
+            turnOffCooling();
+        }
+        else if (dataValue.indexOf(String("Cool Stage 1")))
+        {
+            status = String("Cool Stage 1");
+            turnOffHeating();
+            setCooling(STAGE1);
+        }
+        else if (dataValue.indexOf(String("Cool Stage 2")))
+        {
+            status = String("Cool Stage 2");
+            turnOffHeating();
+            setCooling(STAGE2);
+        }
+        else if (dataValue.indexOf(String("Indoor Fan ON")))
+        {
+            status = String("Indoor Fan ON");
+            controlIndoorFan(ON);
+        }
+        else if (dataValue.indexOf(String("Indoor Fan OFF")))
+        {
+            status = String("Indoor Fan OFF");
+            controlIndoorFan(OFF);
+        }
+        else if (dataValue.indexOf(String("RV ON IN COOL")))
+        {
+            status = String("RV ON IN COOL");
+            controlReversingValve(1);
+        }
+        else if (dataValue.indexOf(String("RV ON IN HEAT")))
+        {
+            status = String("RV ON IN HEAT");
+            controlReversingValve(2);
+        }
+        else if (dataValue.indexOf(String("RV OFF")))
+        {
+            status = String("RV OFF");
+            controlReversingValve(OFF);
+        }
+    }
+}
 bool whileCP()
 {
     loopCommunicationHandler();
-    if (networkType == "GPRS")
-    {
-        loopGPRS();
-    }
     if (millis() - lastPub > updateInterval) //publish data to mqtt server
     {
-        // sendData(getDHT22SensorValue());
+        sendData(getDHT22SensorValue());
 
         ledState(ACTIVE_MODE);
 
         lastPub = millis();
     }
-
+    HVACController();
+    loopSafteySwitch();
     if (inAP == 0)
     {
 
@@ -129,9 +192,10 @@ bool whileCP()
 void setup() //main setup functions
 {
     setupCommunicationHandler();
-
     delay(1000);
-
+    setupDHT22();
+    setupSafteySwitches();
+    setupRelays();
     Serial.print("Device ID: ");
     Serial.println(ss.getMacAddress());
 
@@ -165,11 +229,6 @@ void setup() //main setup functions
         AutoConnectInput &apikeyElm = mqtt_setting["apikey"].as<AutoConnectInput>();
         AutoConnectInput &settingsPassElm = mqtt_setting["settingsPass"].as<AutoConnectInput>();
 
-        AutoConnectInput &apnElm = mqtt_setting["apn"].as<AutoConnectInput>();
-        AutoConnectInput &apnUserElm = mqtt_setting["apnUser"].as<AutoConnectInput>();
-        AutoConnectInput &apnPassElm = mqtt_setting["apnPass"].as<AutoConnectInput>();
-        AutoConnectRadio &networkTypeElm = mqtt_setting["networkType"].as<AutoConnectRadio>();
-
         //vibSValueElm.value="VibS:11";
         serverName = String(serverNameElm.value);
         channelId = String(channelidElm.value);
@@ -178,10 +237,6 @@ void setup() //main setup functions
         hostName = String(hostnameElm.value);
         apPass = String(apPassElm.value);
         settingsPass = String(settingsPassElm.value);
-        apnUser = String(apnUserElm.value);
-        apnPass = String(apnPassElm.value);
-        apn = String(apnElm.value);
-        networkType = String(networkTypeElm.value());
 
         if (hostnameElm.value.length())
         {
@@ -225,7 +280,7 @@ void setup() //main setup functions
     Serial.println(hostName);
     Serial.print("Password: ");
     Serial.println(apPass);
-    config.title = "Smart EFM"; //set title of webapp
+    config.title = "SmartHVAC Controller"; //set title of webapp
     Serial.print("Device Hostname: ");
     Serial.println(hostName);
     //add different tabs on homepage
@@ -257,17 +312,9 @@ void setup() //main setup functions
             delay(100);
         }
     }
-    setupRTC();
-    if (networkType == "GPRS")
-    {
-        setupGPRS();
-    }
-    else
-    {
-    }
 
     MDNS.addService("http", "tcp", 80);
-    mqttConnectWiFi(); //start mqtt
+    mqttConnect(); //start mqtt
 }
 
 int k = 0;
@@ -277,15 +324,19 @@ void loop()
     server.handleClient();
     portal.handleRequest();
     loopCommunicationHandler();
-
+    HVACController();
+    loopSafteySwitch();
     if (millis() - lastPub > updateInterval) //publish data to mqtt server
     {
-        if (isDataAvailable())
-        {
 
-            String datastamp = readData() + String(";") + getTimestamp()+String(";")+getGPSData();
-            mqttPublish("SmartEFM/data", datastamp);
-        }
+        sendData(getDHT22SensorValue());
+        tempVal = getDHT22SensorValue();
+        genJSON(ss.getMacAddress(), ss.StringSeparator(tempVal, ',', 0), ss.StringSeparator(tempVal, ',', 1), status);
+        serializeJson(doc, jsonDoc);
+        String topicP = String("hvacdata/") + ss.getMacAddress();
+        Serial.print("Publishing on: ");
+        Serial.println(topicP);
+        mqttClient.publish(topicP.c_str(), jsonDoc);
 
         ledState(ACTIVE_MODE);
 

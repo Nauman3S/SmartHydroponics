@@ -124,16 +124,55 @@ Other components pin connection details
 | `D6`   | `RX2` |
 | `GND`   | `GND` |
 
+#### TDS Sensor
+
+```Arduino Nano Connected with TDS Sensor```
+
+| TDS Sensor | Arduino Nano |
+| :---------- | :---- |
+| `S`   | `A0` |
+| `VCC`   | `VIN` |
+| `GND`   | `GND` |
+
+#### pH Sensor
+
+```Arduino Nano Connected with pH Sensor```
+
+| pH Sensor | Arduino Nano |
+| :---------- | :---- |
+| `S`   | `A1` |
+| `VCC`   | `VIN` |
+| `GND`   | `GND` |
+
+#### ORP Sensor
+
+```Arduino Nano Connected with ORP Sensor```
+
+| ORP Sensor | Arduino Nano |
+| :---------- | :---- |
+| `A`   | `A2` |
+| `+`   | `VIN` |
+| `-`   | `GND` |
+
+#### DS18B20 Sensor
+
+```Arduino Nano Connected with DS18B20 Sensor```
+
+| DS18B20 Sensor | Arduino Nano |
+| :---------- | :---- |
+| `A`   | `A2` |
+| `+`   | `VIN` |
+| `-`   | `GND` |
 
 #### Temperature and Humidity Sensor
 
 ```DHT22 Connected with ESP32```
 
-| DHT22 Pins | ESP32 |
+| DHT22 Pins | ESP32     |
 | :--------- | :---- |
 | `VCC`      | `5V`  |
 | `GND`      | `GND` |
-| `Data`     | `D14` |
+| `Data`     | `D12` |
 
 #### 8 Channle Relay Module(SSR or Mechanical)
 
@@ -142,7 +181,7 @@ Other components pin connection details
 | Relay Module Pins | ESP32 |
 | :---------------- | :---- |
 | `VCC`             | `5V`  |
-| `IN1`             | `D12` |
+| `IN1`             | `D32` |
 | `IN2`             | `D19` |
 | `IN3`             | `D18` |
 | `IN4`             | `D5`  |
@@ -151,6 +190,17 @@ Other components pin connection details
 | `IN7`             | `D15` |
 | `IN8`             | `D26` |
 | `GND`             | `GND` |
+
+#### OLED Display
+
+```OLED Connected with ESP32```
+
+| OLED Pins | ESP32 |
+| :--------- | :---- |
+| `VCC`      | `3.3`  |
+| `GND`      | `GND` |
+| `SCL`     | `D22` |
+| `SCL`     | `D21` |
 
 
 ## 💻WebApp <a name = "webapp"></a>

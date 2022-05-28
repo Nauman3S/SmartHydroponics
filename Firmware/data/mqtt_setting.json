@@ -3,7 +3,8 @@
   "uri": "/mqtt_setting",
   "menu": true,
   "auth": "digest",
-  "element": [{
+  "element": [
+    {
       "name": "style",
       "type": "ACStyle",
       "value": "label+input,label+select{position:sticky;left:120px;width:230px!important;box-sizing:border-box;}"
@@ -54,47 +55,7 @@
       "name": "hostname",
       "type": "ACInput",
       "label": "ESP hostname(Device & AP Name)",
-      "value": "SmartEFM"
-    },
-    {
-      "name": "header2",
-      "type": "ACText",
-      "value": "<h4>Network Settings</h4>",
-      "style": "text-align:center;color:#2f4f4f;"
-    },
-    {
-      "name": "networkType",
-      "type": "ACRadio",
-      "label": "<h3>Network Type</h3>",
-      "value": [
-        "WiFi",
-        "GPRS"
-      ],
-      "arrange": "vertical",
-      "checked": 1
-    },
-    {
-      "name": "apn",
-      "type": "ACInput",
-      "value": "internet",
-      "label": "APN"
-    },
-    {
-      "name": "apnUser",
-      "type": "ACInput",
-      "value": "internet",
-      "label": "APN Username"
-    },
-    {
-      "name": "apnPass",
-      "type": "ACInput",
-      "value": "internet",
-      "label": "APN Password"
-    },
-    {
-      "name": "newline2",
-      "type": "ACElement",
-      "value": "<hr>"
+      "value": "SmartHVAC"
     },
     {
       "name": "apPass",

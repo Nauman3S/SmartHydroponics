@@ -43,13 +43,17 @@ void handleRoot()
         "</head>"
         "<body>"
         "<div class=\"menu\">" AUTOCONNECT_LINK(BAR_24) "</div>"
-                                                        "Smart Electric Frequency Monitor Device<br>");
+                                                        "Smart HVAC Controller Device<br>");
 
-    page += String(F("<h1>Smart Electric Frequency Monitor Device</h1>"));
+    page += String(F("<h1>Smart HVAC Controller</h1>"));
 
     page += String(F("<h3>Device ID: "));
     page += ss.getMacAddress();
     page += String(F("</h3>"));
+
+    page += String(F("<h4>Temperature and Humidity: "));
+    page += getDHT22SensorValue();
+    page += String(F("</h4>"));
 
     page += String(F("<p><br><a class=\"button\" href=\"/\">Refresh</a></p>"));
     page += String(F("</body></html>"));

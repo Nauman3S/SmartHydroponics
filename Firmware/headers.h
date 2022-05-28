@@ -3,18 +3,26 @@ String channelId;
 String userKey;
 String apiKey;
 String apid;
-String hostName = "SmartEFM";
+String hostName = "SmartHVAC";
 String apPass;
 String settingsPass;
-String apn="null";
-String apnUser="";
-String apnPass="";
-String networkType="WiFi";
 #include <ArduinoJson.h>
 DynamicJsonDocument doc(2024);
 String myMac = "";
 String status="NULL";
+char jsonDoc[2024];
+void genJSON(String mac, String temp, String humidity, String status)
+{
 
+  // doc["Timestamp"] = String("12/2/2 03:11:33");
+  // doc["MAC_Address"] =myMac;
+  doc["macAddress"] = mac;
+  doc["temperature"] = temp;
+  doc["humidity"] = humidity;
+  doc["status"] = status;
+
+  serializeJson(doc, Serial);
+}
 
 #if defined(ARDUINO_ARCH_ESP8266)
 #include <ESP8266WiFi.h>
@@ -50,8 +58,7 @@ fs::SPIFFSFS &FlashFS = SPIFFS;
 #endif
 #include "statusLED.h"
 #include "neoTimer.h"
-#include "rtcHandler.h"
-#include "gpsHandler.h"
+
 #define GET_CHIPID() ((uint16_t)(ESP.getEfuseMac() >> 32))
 
 unsigned long lastPub = 0;

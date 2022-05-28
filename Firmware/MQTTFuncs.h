@@ -2,7 +2,7 @@ void MQTTUnSubscribe();
 void MQTTSubscriptions();
 void callback(char *topic, byte *payload, unsigned int length);
 void reconnect();
-bool mqttConnectWiFi();
+bool mqttConnect();
 void mqttPublish(String path, String msg);
 int deviceExisits = 0;
 
@@ -83,10 +83,8 @@ void reconnect()
         }
     }
 }
-bool mqttConnectWiFi()
+bool mqttConnect()
 {
-    mqttClient.setBufferSize(3024);
-
     static const char alphanum[] = "0123456789"
                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                    "abcdefghijklmnopqrstuvwxyz"; // For random generation of client ID.
