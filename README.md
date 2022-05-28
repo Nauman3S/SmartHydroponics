@@ -118,9 +118,9 @@ Here's the complete circuit diagram of the system.
 Other components pin connection details
 ```
 
-#### Smart Socket Circuit
+#### Smart Dosing Device
 
-```Different Components connected to Arduino Pro Mini for Frequency Measurements```
+```Different Components connected to Arduino Nano for Frequency Measurements```
 
 #### ESP32 With Arduino Nano Connections
 
