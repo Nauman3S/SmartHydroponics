@@ -40,7 +40,7 @@ This repo contains
 
 <br><br>
 
-#   Smart Socket<a name = "sfms"></a>
+#   Smart Dosing Device<a name = "sfms"></a>
 ## Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your system.
@@ -83,11 +83,19 @@ You should have Arduino IDE Installed
 
 1.  Select ESP32 Dev Module from Tools->Board->ESP32
 2.  Select the correct port from Tools->Port
-3.  Then open FSP32_FW.ino file from Firmware/FreqMonitor/ESP32_FW folder.
+3.  Then open ESP32_FW.ino file from Firmware/ESP32_FW folder.
 4.  Select Tools > ESP32 Sketch Data Upload menu item. This should start uploading the files into ESP32 flash file system.
 5.  Now Upload the Code to your ESP32 Dev Module.
 6.  Your ESP32 is now ready to be used.
 
+#### Arduino Nano Configuration
+
+1.  Open ArduinoNano_FW.ino file from Firmware/ArduinoNano_FW folder.
+2.  Select Arduino Nano from Tools->Board
+3.  Select the correct port from Tools->Port
+4.  Now Upload the Code to your Arduino Nano.
+
+If the code uploaded succesfully, you can disconnect the USB Cable from Arduino Nano.
 ##  🔌Circuit <a name = "circuit"></a>
 
 ### ESP32 DevKit V1 Pinout

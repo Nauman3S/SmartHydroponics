@@ -3,7 +3,7 @@ String channelId;
 String userKey;
 String apiKey;
 String apid;
-String hostName = "SmartHVAC";
+String hostName = "SmartHydroponics";
 String apPass;
 String settingsPass;
 #include <ArduinoJson.h>

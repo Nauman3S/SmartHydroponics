@@ -3,10 +3,10 @@
 #include "DHT22Handler.h"
 #include "webApp.h" //Captive Portal webpages
 #include <FS.h>     //ESP32 File System
-#include "HVACHandler.h"
+#include "RelayHandler.h"
 #include "communicationHandler.h"
 IPAddress ipV(192, 168, 4, 1);
-String loadParams(AutoConnectAux &aux, PageArgument &args) //function to load saved settings
+String loadParams(AutoConnectAux &aux, PageArgument &args) // function to load saved settings
 {
     (void)(args);
     File param = FlashFS.open(PARAM_FILE, "r");
@@ -25,24 +25,24 @@ String loadParams(AutoConnectAux &aux, PageArgument &args) //function to load sa
     return String("");
 }
 
-String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
+String saveParams(AutoConnectAux &aux, PageArgument &args) // save the settings
 {
-    serverName = args.arg("mqttserver"); //broker
+    serverName = args.arg("mqttserver"); // broker
     serverName.trim();
 
     channelId = args.arg("channelid");
     channelId.trim();
 
-    userKey = args.arg("userkey"); //user name
+    userKey = args.arg("userkey"); // user name
     userKey.trim();
 
-    apiKey = args.arg("apikey"); //password
+    apiKey = args.arg("apikey"); // password
     apiKey.trim();
 
-    apPass = args.arg("apPass"); //ap pass
+    apPass = args.arg("apPass"); // ap pass
     apPass.trim();
 
-    settingsPass = args.arg("settingsPass"); //ap pass
+    settingsPass = args.arg("settingsPass"); // ap pass
     settingsPass.trim();
 
     hostName = args.arg("hostname");
@@ -68,7 +68,7 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
 
     return String("");
 }
-bool loadAux(const String auxName) //load defaults from data/*.json
+bool loadAux(const String auxName) // load defaults from data/*.json
 {
     bool rc = false;
     Serial.println("load aux func");
@@ -96,82 +96,20 @@ void loopSafteySwitch()
         safteySW = 0;
     }
 }
-void HVACController()
+void SensorsController()
 {
-    if (isDataAvailable() && safteySW == 0)
+    if (isDataAvailable())
     {
         String dataValue = readData();
         if (dataValue.indexOf(String("Heat Stage 1")))
         {
-            status = String("Heat Stage 1");
-            turnOffCooling();
-            setHeating(STAGE1);
-        }
-        else if (dataValue.indexOf(String("Heat Stage 2")))
-        {
-            status = String("Heat Stage 2");
-            turnOffCooling();
-            setHeating(STAGE2);
-        }
-        else if (dataValue.indexOf(String("Heat Stage 3")))
-        {
-            status = String("Heat Stage 3");
-            turnOffCooling();
-            setHeating(STAGE3);
-        }
-        else if (dataValue.indexOf(String("Heat OFF")))
-        {
-            status = String("Heat OFF");
-            turnOffHeating();
-        }
-        else if (dataValue.indexOf(String("Cool OFF")))
-        {
-            status = String("Cool OFF");
-            turnOffCooling();
-        }
-        else if (dataValue.indexOf(String("Cool Stage 1")))
-        {
-            status = String("Cool Stage 1");
-            turnOffHeating();
-            setCooling(STAGE1);
-        }
-        else if (dataValue.indexOf(String("Cool Stage 2")))
-        {
-            status = String("Cool Stage 2");
-            turnOffHeating();
-            setCooling(STAGE2);
-        }
-        else if (dataValue.indexOf(String("Indoor Fan ON")))
-        {
-            status = String("Indoor Fan ON");
-            controlIndoorFan(ON);
-        }
-        else if (dataValue.indexOf(String("Indoor Fan OFF")))
-        {
-            status = String("Indoor Fan OFF");
-            controlIndoorFan(OFF);
-        }
-        else if (dataValue.indexOf(String("RV ON IN COOL")))
-        {
-            status = String("RV ON IN COOL");
-            controlReversingValve(1);
-        }
-        else if (dataValue.indexOf(String("RV ON IN HEAT")))
-        {
-            status = String("RV ON IN HEAT");
-            controlReversingValve(2);
-        }
-        else if (dataValue.indexOf(String("RV OFF")))
-        {
-            status = String("RV OFF");
-            controlReversingValve(OFF);
         }
     }
 }
 bool whileCP()
 {
     loopCommunicationHandler();
-    if (millis() - lastPub > updateInterval) //publish data to mqtt server
+    if (millis() - lastPub > updateInterval) // publish data to mqtt server
     {
         sendData(getDHT22SensorValue());
 
@@ -179,8 +117,8 @@ bool whileCP()
 
         lastPub = millis();
     }
-    HVACController();
-    loopSafteySwitch();
+    SensorsController();
+
     if (inAP == 0)
     {
 
@@ -189,17 +127,17 @@ bool whileCP()
     }
 }
 
-void setup() //main setup functions
+void setup() // main setup functions
 {
     setupCommunicationHandler();
     delay(1000);
     setupDHT22();
-    setupSafteySwitches();
+
     setupRelays();
     Serial.print("Device ID: ");
     Serial.println(ss.getMacAddress());
 
-    if (!MDNS.begin("esp32")) //starting mdns so that user can access webpage using url `esp32.local`(will not work on all devices)
+    if (!MDNS.begin("esp32")) // starting mdns so that user can access webpage using url `esp32.local`(will not work on all devices)
     {
         Serial.println("Error setting up MDNS responder!");
         while (1)
@@ -215,7 +153,7 @@ void setup() //main setup functions
     loadAux(AUX_MQTTSETTING);
     loadAux(AUX_MQTTSAVE);
     AutoConnectAux *setting = portal.aux(AUX_MQTTSETTING);
-    if (setting) //get all the settings parameters from setting page on esp32 boot
+    if (setting) // get all the settings parameters from setting page on esp32 boot
     {
         Serial.println("Setting loaded");
         PageArgument args;
@@ -229,7 +167,7 @@ void setup() //main setup functions
         AutoConnectInput &apikeyElm = mqtt_setting["apikey"].as<AutoConnectInput>();
         AutoConnectInput &settingsPassElm = mqtt_setting["settingsPass"].as<AutoConnectInput>();
 
-        //vibSValueElm.value="VibS:11";
+        // vibSValueElm.value="VibS:11";
         serverName = String(serverNameElm.value);
         channelId = String(channelidElm.value);
         userKey = String(userkeyElm.value);
@@ -240,10 +178,10 @@ void setup() //main setup functions
 
         if (hostnameElm.value.length())
         {
-            //hostName=hostName+ String("-") + String(GET_CHIPID(), HEX);
+            // hostName=hostName+ String("-") + String(GET_CHIPID(), HEX);
             //;
-            //portal.config(hostName.c_str(), apPass.c_str());
-            // portal.config(hostName.c_str(), "123456789AP");
+            // portal.config(hostName.c_str(), apPass.c_str());
+            //  portal.config(hostName.c_str(), "123456789AP");
             config.apid = hostName + "-" + String(GET_CHIPID(), HEX);
             config.password = apPass;
             config.psk = apPass;
@@ -258,8 +196,8 @@ void setup() //main setup functions
             config.apid = hostName + "-" + String(GET_CHIPID(), HEX);
             config.password = apPass;
             config.psk = apPass;
-            //config.hostName = hostName;//hostnameElm.value+ "-" + String(GET_CHIPID(), HEX);
-            // portal.config(hostName.c_str(), "123456789AP");
+            // config.hostName = hostName;//hostnameElm.value+ "-" + String(GET_CHIPID(), HEX);
+            //  portal.config(hostName.c_str(), "123456789AP");
             Serial.println("hostname set to " + hostName);
         }
         config.homeUri = "/_ac";
@@ -272,7 +210,7 @@ void setup() //main setup functions
     {
         Serial.println("aux. load error");
     }
-    //config.homeUri = "/_ac";
+    // config.homeUri = "/_ac";
     config.apip = ipV;
     config.autoReconnect = true;
     config.reconnectInterval = 1;
@@ -280,10 +218,10 @@ void setup() //main setup functions
     Serial.println(hostName);
     Serial.print("Password: ");
     Serial.println(apPass);
-    config.title = "SmartHVAC Controller"; //set title of webapp
+    config.title = "SmartHVAC Controller"; // set title of webapp
     Serial.print("Device Hostname: ");
     Serial.println(hostName);
-    //add different tabs on homepage
+    // add different tabs on homepage
 
     //  portal.disableMenu(AC_MENUITEM_DISCONNECT);
     server.on("/", handleRoot);
@@ -314,7 +252,7 @@ void setup() //main setup functions
     }
 
     MDNS.addService("http", "tcp", 80);
-    mqttConnect(); //start mqtt
+    mqttConnect(); // start mqtt
 }
 
 int k = 0;
@@ -324,16 +262,15 @@ void loop()
     server.handleClient();
     portal.handleRequest();
     loopCommunicationHandler();
-    HVACController();
-    loopSafteySwitch();
-    if (millis() - lastPub > updateInterval) //publish data to mqtt server
+    SensorsController();
+    if (millis() - lastPub > updateInterval) // publish data to mqtt server
     {
 
         sendData(getDHT22SensorValue());
         tempVal = getDHT22SensorValue();
         genJSON(ss.getMacAddress(), ss.StringSeparator(tempVal, ',', 0), ss.StringSeparator(tempVal, ',', 1), status);
         serializeJson(doc, jsonDoc);
-        String topicP = String("hvacdata/") + ss.getMacAddress();
+        String topicP = String("smarthydro/") + ss.getMacAddress();
         Serial.print("Publishing on: ");
         Serial.println(topicP);
         mqttClient.publish(topicP.c_str(), jsonDoc);
