@@ -216,7 +216,11 @@ Other components pin connection details
 
 WebApp can be accessed from the link below
 
-**TO BE ADDED**
+-   URL: https://lonetree-webapp.production.rehanshakir.com/
+
+    -   Username: admin@lontree.com
+
+    -   Password: 12345678
 
 ### Data
 Data published from the device would be in the JSON format given below:
