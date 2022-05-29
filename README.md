@@ -162,6 +162,16 @@ Other components pin connection details
 | `+`   | `VIN` |
 | `-`   | `GND` |
 
+#### CO2 Sensor
+
+```Arduino Nano Connected with CO2 Sensor(MQ-135)```
+
+| CO2 Sensor | Arduino Nano |
+| :---------- | :---- |
+| `A0`   | `A3` |
+| `VCC`   | `VIN` |
+| `GND`   | `GND` |
+
 #### DS18B20 Sensor
 
 ```Arduino Nano Connected with DS18B20 Sensor```
@@ -307,21 +317,25 @@ In settings page, you can configure your device. You can set network type (WiFi/
 Following components are used to make this project
 
 1.   Microcontrollers
-     *   ESP32 with SIM800L
-    https://de.aliexpress.com/item/4001142716386.html?gatewayAdapt=glo2deu
+     *   [ESP32 Dev Module](https://www.amazon.com/VKLSVAN-ESP-WROOM-32-Development-Dual-Mode-Microcontroller/dp/B07T6J3PXZ/ref=sr_1_5?keywords=esp32+devkit&qid=1652733191&sprefix=esp32+dev%2Caps%2C165&sr=8-5)
+     *   [Arduino Nano](https://www.amazon.com/Deegoo-ATmega328P-Microcontroller-Board-Arduino/dp/B07R9VWD39/ref=sr_1_6?crid=2179CL53V5MWC&keywords=arduino+nano&qid=1652733134&sprefix=arduino+nano%2Caps%2C168&sr=8-6)
 
-2.  Power Circuit
-    *   AC to 5V DC Converter
-    https://www.amazon.com/Converter-Universal-Isolated-Switching-Version/dp/B07SGQ6XXR/ref=sr_1_1?crid=12JGAW640YK25&keywords=ac+to+dc+module&qid=1642413883&sprefix=ac+to+dc+modu%2Caps%2C303&sr=8-1
-3.  Misc
-    *   5mm LED Light
-    https://www.amazon.com/MCIGICM-Circuit-Assorted-Science-Experiment/dp/B07PG84V17/ref=sr_1_2?crid=2EJHAQUUNKS16&keywords=led+5mm&qid=1642414000&sprefix=led+5%2Caps%2C336&sr=8-2
+2.  Sensors
+    *   [TDS Sensor](https://www.amazon.com/CQRobot-Ocean-Compatible-Scientific-Laboratory/dp/B08KXRHK7H/ref=sr_1_8?crid=1APGH1PW0VQVO&keywords=gravity+orp+sensor&qid=1652732820&sprefix=gravity+orp+senso%2Caps%2C171&sr=8-8)
+    *   [pH Sensor](https://www.amazon.com/Accuracy-Connect-Terminal-Electrode-Detection/dp/B08GYF269Y/ref=sr_1_1_sspa?crid=2CAFO2BY60GSI&keywords=gravity+ph+sensor&qid=1652732873&sprefix=gravity+ph%2Caps%2C139&sr=8-1-spons&psc=1&smid=A1YU5GT3B4HWHJ&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUFZNk9UUFlDNkZaNUkmZW5jcnlwdGVkSWQ9QTA0NTQyMjYyNVdaUUU3RVY5VkcyJmVuY3J5cHRlZEFkSWQ9QTAwMzU4MjcyUE1OUDI0Vk9LQUlIJndpZGdldE5hbWU9c3BfYXRmJmFjdGlvbj1jbGlja1JlZGlyZWN0JmRvTm90TG9nQ2xpY2s9dHJ1ZQ==)
+    *   [ORP Sensor](https://www.dfrobot.com/product-1071.html)
+    *   [CO2 Sensor](https://www.amazon.com/MQ-135-Quality-Hazardous-Detection-Arduino/dp/B07ZZ61LQT/ref=sr_1_4?crid=2MRE4482B1Y6&keywords=mq+135&qid=1653812430&sprefix=mq+13%2Caps%2C158&sr=8-4)
+    *   [DS18B20 Temperature Sensor Probe](https://www.amazon.com/DS18B20-Temperature-Waterproof-Stainless-Raspberry/dp/B094FKQ9BS/ref=sr_1_22_sspa?crid=3BI0JPGUYS27U&keywords=ds3231+probe&qid=1652732757&sprefix=ds3231+prob%2Caps%2C155&sr=8-22-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEyN1NQTjVWUlpYNEhVJmVuY3J5cHRlZElkPUEwNzIwNTc1MUNYWktRUk9WRVlPTyZlbmNyeXB0ZWRBZElkPUEwNjYzNzY1MjZSOURHU0VHSVI3SCZ3aWRnZXROYW1lPXNwX2J0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU=)
+    *   [Humidity and Temperature Sensor](https://www.amazon.com/ICQUANZX-Digital-Temperature-Humidity-Monitor/dp/B08XQNKW4P/ref=sr_1_3?crid=36YP22XYCJS7O&keywords=dht22&qid=1652732914&sprefix=dht2%2Caps%2C163&sr=8-3)
 
-    *   Bi-directional logic level shifter
-    https://www.amazon.com/DZS-Elec-Converter-Bi-Directional-Communication/dp/B07J67MTKV/ref=sr_1_10?keywords=logic+level+converter+bi-directional&qid=1642477438&sprefix=bi-directional+level%2Caps%2C417&sr=8-10
-    
-    *   Solid State Relay
-    https://www.amazon.com/DollaTek-1-Channel-Level-Trigger-Module/dp/B07DK29FR6/ref=sr_1_12?crid=3AY7SEMFWEWVT&keywords=ssr+relay+module&qid=1651029377&sprefix=ss+relay+module%2Caps%2C174&sr=8-12
+3.  Display
+    * [OLED](https://www.amazon.com/UCTRONICS-SSD1306-Self-Luminous-Display-Raspberry/dp/B072Q2X2LL/ref=sr_1_7?keywords=oled+0.96&qid=1652733097&sprefix=oled+0.%2Caps%2C159&sr=8-7)
+4.  Power
+    *   [5v 5A DC Adapter](https://www.amazon.com/ALITOVE-Converter-5-5x2-1mm-100V-240V-Security/dp/B078RT3ZPS/ref=sr_1_3?keywords=5v%2B5a%2Bpower%2Bsupply&qid=1652733461&sprefix=5v%2B5a%2Caps%2C164&sr=8-3&th=1)
+5.  Misc
+    *   [8 Channel Relay Module for Pumps](https://www.amazon.com/SainSmart-101-70-102-8-Channel-Relay-Module/dp/B0057OC5WK/ref=sr_1_3?crid=QF6Z4XF4V0GG&keywords=8+channel+relay&qid=1652733309&sprefix=8%2Caps%2C145&sr=8-3)
+
+    *   [Bi-directional logic level shifter](https://www.amazon.com/SongHe-Channels-Converter-Bi-Directional-Shifter/dp/B07YZTW2SM/ref=sr_1_4?keywords=bidirectional+logic+level+converter+3.3v+to+5v&qid=1652733423&sprefix=bi+directional+log%2Caps%2C169&sr=8-4)
 # ⛏️ Built Using <a name = "built_using"></a>
 
 
