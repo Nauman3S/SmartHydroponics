@@ -259,7 +259,14 @@ void loop()
         String sDataPayload = sensorDataPayload();
         if (!(sDataPayload.indexOf("-1") >= 0))
         {
-            genJSON(ss.getMacAddress(), ss.StringSeparator(tempVal, ',', 0), ss.StringSeparator(tempVal, ',', 1), ss.StringSeparator(sDataPayload, ',', 0), , ss.StringSeparator(sDataPayload, ',', 1), ss.StringSeparator(sDataPayload, ',', 2), ss.StringSeparator(sDataPayload, ',', 3), ss.StringSeparator(sDataPayload, ',', 4));
+            genJSON(ss.getMacAddress(),
+                    ss.StringSeparator(tempVal, ',', 0),
+                    ss.StringSeparator(tempVal, ',', 1),
+                    ss.StringSeparator(sDataPayload, ',', 0),
+                    ss.StringSeparator(sDataPayload, ',', 1),
+                    ss.StringSeparator(sDataPayload, ',', 2),
+                    ss.StringSeparator(sDataPayload, ',', 3),
+                    ss.StringSeparator(sDataPayload, ',', 4));
             serializeJson(doc, jsonDoc);
             String topicP = String("smartdosing/") + ss.getMacAddress();
             Serial.print("Publishing on: ");
