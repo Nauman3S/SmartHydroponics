@@ -3,23 +3,25 @@ String channelId;
 String userKey;
 String apiKey;
 String apid;
-String hostName = "SmartHydroponics";
+String hostName = "SmartDosingDevice";
 String apPass;
 String settingsPass;
 #include <ArduinoJson.h>
 DynamicJsonDocument doc(2024);
 String myMac = "";
-String status="NULL";
+String status = "NULL";
 char jsonDoc[2024];
-void genJSON(String mac, String temp, String humidity, String status)
+void genJSON(String mac, String Temperature, String humidity,
+             String LiquidTemperature, String TDS, String pH, String ORP, String CO2)
 {
-
-  // doc["Timestamp"] = String("12/2/2 03:11:33");
-  // doc["MAC_Address"] =myMac;
   doc["macAddress"] = mac;
-  doc["temperature"] = temp;
+  doc["temperature"] = Temperature;
   doc["humidity"] = humidity;
-  doc["status"] = status;
+  doc["liquidtemperature"] = LiquidTemperature;
+  doc["tds"] = TDS;
+  doc["ph"] = pH;
+  doc["orp"] = ORP;
+  doc["co2"] = CO2;
 
   serializeJson(doc, Serial);
 }
@@ -85,7 +87,7 @@ static const char PAGE_AUTH[] PROGMEM = R"(
 }
 )";
 
-SoftwareStack ss; //SS instance
+SoftwareStack ss; // SS instance
 AutoConnectConfig config;
 AutoConnect portal(server);
 
@@ -95,7 +97,7 @@ String mac = (WiFi.macAddress());
 char __mac[sizeof(mac)];
 
 const char *mqtt_server = "broker.hivemq.com";
-//IPAddress mqttBroker(34,214,65,82);
+// IPAddress mqttBroker(34,214,65,82);
 const int mqtt_port = 1883;
 const char *mqtt_user = "testUser";
 const char *mqtt_pass = "testUser@123";
@@ -116,7 +118,7 @@ String connectionMode = "WiFi";
 
 bool atDetect(IPAddress &softapIP)
 {
-    Serial.println("Captive portal started, SoftAP IP:" + softapIP.toString());
+  Serial.println("Captive portal started, SoftAP IP:" + softapIP.toString());
 
-    return true;
+  return true;
 }

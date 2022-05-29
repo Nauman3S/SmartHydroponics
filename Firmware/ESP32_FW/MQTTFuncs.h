@@ -8,20 +8,13 @@ int deviceExisits = 0;
 
 void MQTTUnSubscribe()
 {
-    // String topicN = String("CPT/device/price");
-    String topicN = ss.getMacAddress() + String("/hvac");
+    String topicN = ss.getMacAddress() + String("/dosingControl");
 
     mqttClient.unsubscribe(topicN.c_str());
 }
 void MQTTSubscriptions()
 {
-    //mqttClient.subscribe("SmartTControl/data/v");
-
-    // for(int i=0;i<10;i++){
-    //   IMEIsList[i]==String("NA");
-    // }
-    // String topicN = String("CPT/device/price");
-    String topicN = ss.getMacAddress() + String("/hvac");
+    String topicN = ss.getMacAddress() + String("/dosingControl");
 
     mqttClient.subscribe(topicN.c_str());
 }
@@ -37,10 +30,13 @@ void callback(char *topic, byte *payload, unsigned int length)
         pLoad = pLoad + String((char)payload[i]);
     }
     Serial.println();
-    // if (String(topic) == String("CPT/device/price"))
-    // {
-    //     setCrypto(pLoad);
-    // }
+    String topicN = ss.getMacAddress() + String("/dosingControl");
+    if (String(topic) == topicN)
+    {
+        String relayNumber = ss.StringSeparator(pLoad, ',', 0);
+        String relayState = ss.StringSeparator(pLoad, ',', 1);
+        relayControl(relayNumber.toInt(), relayState.toInt());
+    }
     status = pLoad;
 
     // Switch on the LED if an 1 was received as first character
@@ -69,7 +65,7 @@ void reconnect()
         if (mqttClient.connect(clientId.c_str(), mqtt_user, mqtt_pass))
         {
             Serial.println("Established:" + String(clientId));
-            //mqttClient.subscribe("SmartTControl/data/v");
+            // mqttClient.subscribe("SmartTControl/data/v");
             MQTTSubscriptions();
             // return true;
         }
@@ -111,7 +107,7 @@ bool mqttConnect()
         {
             Serial.println("Established:" + String(clientId));
             internetStatus = "Connected";
-            //mqttClient.subscribe("SmartTControl/data/v");
+            // mqttClient.subscribe("SmartTControl/data/v");
             MQTTSubscriptions();
             return true;
         }
@@ -129,6 +125,6 @@ bool mqttConnect()
 
 void mqttPublish(String path, String msg)
 {
-    //String path = String("channels/") + channelId + String("/publish/") + apiKey;
+    // String path = String("channels/") + channelId + String("/publish/") + apiKey;
     mqttClient.publish(path.c_str(), msg.c_str());
 }

@@ -40,7 +40,7 @@ String generateDataPayload()
                 String(getpHSensorReadings()) + String(",") +
                 String(getORPSensorReadings()) + String(",") +
                 String(getCO2SensorReadings());
-    pL = String("*") + pL + String("*");
+    return pL;
 }
 
 void loop()

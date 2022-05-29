@@ -43,9 +43,9 @@ void handleRoot()
         "</head>"
         "<body>"
         "<div class=\"menu\">" AUTOCONNECT_LINK(BAR_24) "</div>"
-                                                        "Smart HVAC Controller Device<br>");
+                                                        "Smart Dosing Device<br>");
 
-    page += String(F("<h1>Smart HVAC Controller</h1>"));
+    page += String(F("<h1>Smart Dosing Device</h1>"));
 
     page += String(F("<h3>Device ID: "));
     page += ss.getMacAddress();

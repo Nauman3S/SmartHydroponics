@@ -1,9 +1,9 @@
+#include "RelayHandler.h"
 #include "headers.h"   //all misc. headers and functions
 #include "MQTTFuncs.h" //MQTT related functions
 #include "DHT22Handler.h"
 #include "webApp.h" //Captive Portal webpages
 #include <FS.h>     //ESP32 File System
-#include "RelayHandler.h"
 #include "communicationHandler.h"
 IPAddress ipV(192, 168, 4, 1);
 String loadParams(AutoConnectAux &aux, PageArgument &args) // function to load saved settings
@@ -16,8 +16,6 @@ String loadParams(AutoConnectAux &aux, PageArgument &args) // function to load s
     {
         Serial.println("load params func");
         aux.loadElement(param);
-
-        // curSValueElm.value="CurS:7788";
         param.close();
     }
     else
@@ -84,26 +82,17 @@ bool loadAux(const String auxName) // load defaults from data/*.json
     return rc;
 }
 uint8_t inAP = 0;
-int safteySW = 0;
-void loopSafteySwitch()
-{
-    if (getSafteySwitchState(SWITCH1))
-    {
-        safteySW = 1;
-    }
-    if (getSafteySwitchState(SWITCH2))
-    {
-        safteySW = 0;
-    }
-}
-void SensorsController()
+
+String sensorDataPayload()
 {
     if (isDataAvailable())
     {
         String dataValue = readData();
-        if (dataValue.indexOf(String("Heat Stage 1")))
-        {
-        }
+        return dataValue;
+    }
+    else
+    {
+        return String("-1");
     }
 }
 bool whileCP()
@@ -117,7 +106,6 @@ bool whileCP()
 
         lastPub = millis();
     }
-    SensorsController();
 
     if (inAP == 0)
     {
@@ -129,6 +117,7 @@ bool whileCP()
 
 void setup() // main setup functions
 {
+    Serial.begin(115200);
     setupCommunicationHandler();
     delay(1000);
     setupDHT22();
@@ -262,18 +251,21 @@ void loop()
     server.handleClient();
     portal.handleRequest();
     loopCommunicationHandler();
-    SensorsController();
     if (millis() - lastPub > updateInterval) // publish data to mqtt server
     {
 
         sendData(getDHT22SensorValue());
         tempVal = getDHT22SensorValue();
-        genJSON(ss.getMacAddress(), ss.StringSeparator(tempVal, ',', 0), ss.StringSeparator(tempVal, ',', 1), status);
-        serializeJson(doc, jsonDoc);
-        String topicP = String("smarthydro/") + ss.getMacAddress();
-        Serial.print("Publishing on: ");
-        Serial.println(topicP);
-        mqttClient.publish(topicP.c_str(), jsonDoc);
+        String sDataPayload = sensorDataPayload();
+        if (!(sDataPayload.indexOf("-1") >= 0))
+        {
+            genJSON(ss.getMacAddress(), ss.StringSeparator(tempVal, ',', 0), ss.StringSeparator(tempVal, ',', 1), ss.StringSeparator(sDataPayload, ',', 0), , ss.StringSeparator(sDataPayload, ',', 1), ss.StringSeparator(sDataPayload, ',', 2), ss.StringSeparator(sDataPayload, ',', 3), ss.StringSeparator(sDataPayload, ',', 4));
+            serializeJson(doc, jsonDoc);
+            String topicP = String("smartdosing/") + ss.getMacAddress();
+            Serial.print("Publishing on: ");
+            Serial.println(topicP);
+            mqttClient.publish(topicP.c_str(), jsonDoc);
+        }
 
         ledState(ACTIVE_MODE);
 

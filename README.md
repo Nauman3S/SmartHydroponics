@@ -238,9 +238,13 @@ Data published from the device would be in the JSON format given below:
 ```json
 {
   "macAddress": "",
-  "Name": "",
-  "Address": "",
-  "RSSI": ""
+  "temperature": "",
+  "humidity": "",
+  "liquidtemperature": "",
+  "tds": "",
+  "ph": "",
+  "orp": "",
+  "co2": "",
 }
 ```
 
@@ -251,7 +255,8 @@ Data published from the device would be in the JSON format given below:
 
 | Topic | Type | Details
 | :---------- | :---- |  :---- |
-| `LoneTree Smart Dosing Device/device/data`   | `PUBLISH` |  `Publishes the socket state string` | 
+| `smartdosing/`   | `PUBLISH` |  `Publishes the Sensors' payload JSON` | 
+| `macAddress/dosingControl`   | `SUBSCRIBE` |  `Control Pumps. Payload PumpNumber,PumpState. Where PumpNumber=1-8 and PumpState=0 or 1` | 
 
 ### FrontEnd
 
@@ -276,7 +281,7 @@ You can access the database from the link below
 1.  [Upload the code to your Arduino Pro Mini](https://github.com/Nauman3S/LoneTree Smart Dosing Device#arduino-pro-mini-configuration)
 2.  [Upload the code to your ESP32](https://github.com/Nauman3S/LoneTree Smart Dosing Device#esp32-configurationfrequency-counter)
 3.  [Make the circuit](https://github.com/Nauman3S/LoneTree Smart Dosing Device#complete-circuit-diagram)
-4.  Power on your ESP32, it will present you with an AP named `SmartEFM-abcd` (while `SmartEFM` can be changed in the portal and `abcd` is a unique id for each esp32) 
+4.  Power on your ESP32, it will present you with an AP named `SmartDosing-abcd` (while `SmartDosing` can be changed in the portal and `abcd` is a unique id for each esp32) 
 5.  Default captive portal password `123456789AP` which can be changed in captive portal. 
 6.  Connect to the ESP32 access point and open the web-browser and navigate to the link `http://esp32.local/_ac`. This link will work on most of the operating systems but if your operating system is not allowing to open it, you may want to check the captive portal IP Address from the serial monitor and can use that IP address inplace of the above mentioned URL. 
 7.  The default access IP Address is `http://192.168.4.1/_ac` 
@@ -288,7 +293,7 @@ You can access the database from the link below
 ![SCR1](artwork/scr4.png)
 10. Once connected to a WiFi network, you can again access the captive portal using same URL or the IP Address from the Serial monitor.
 11. You can open settings page with following default credentials
-   1.  User: **AP Name (SmartEFM)**
+   1.  User: **AP Name (SmartDosing)**
    2.  Password: **admin**
 
 In settings page, you can configure your device. You can set network type (WiFi/GPRS) and you can set network APN details as well.
