@@ -278,9 +278,9 @@ You can access the database from the link below
 
 ## Usage <a name = "usage"></a>
 
-1.  [Upload the code to your Arduino Pro Mini](https://github.com/Nauman3S/LoneTree Smart Dosing Device#arduino-pro-mini-configuration)
-2.  [Upload the code to your ESP32](https://github.com/Nauman3S/LoneTree Smart Dosing Device#esp32-configurationfrequency-counter)
-3.  [Make the circuit](https://github.com/Nauman3S/LoneTree Smart Dosing Device#complete-circuit-diagram)
+1.  [Upload the code to your ESP32](https://github.com/Nauman3S/SmartHydroponics#esp32-configurationfrequency-counter)
+2.  [Upload the code to your Arduino Nano](https://github.com/Nauman3S/SmartHydroponics#arduino-nano-configuration)
+3.  [Make the circuit](https://github.com/Nauman3S/SmartHydroponics#complete-circuit-diagram)
 4.  Power on your ESP32, it will present you with an AP named `SmartDosing-abcd` (while `SmartDosing` can be changed in the portal and `abcd` is a unique id for each esp32) 
 5.  Default captive portal password `123456789AP` which can be changed in captive portal. 
 6.  Connect to the ESP32 access point and open the web-browser and navigate to the link `http://esp32.local/_ac`. This link will work on most of the operating systems but if your operating system is not allowing to open it, you may want to check the captive portal IP Address from the serial monitor and can use that IP address inplace of the above mentioned URL. 
@@ -299,7 +299,7 @@ You can access the database from the link below
 In settings page, you can configure your device. You can set network type (WiFi/GPRS) and you can set network APN details as well.
 ![SCR1](artwork/scr3.png)
 
-13. Open the [test dashboard](https://nodered-proxy.production.wrapdrive.tech/ui/#!/2) to see the live data
+12. Open the dashboard to see the live data
 
 <br><br>
 
