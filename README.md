@@ -178,7 +178,7 @@ Other components pin connection details
 
 | DS18B20 Sensor | Arduino Nano |
 | :---------- | :---- |
-| `A`   | `A2` |
+| `A`   | `D12` |
 | `+`   | `VIN` |
 | `-`   | `GND` |
 
